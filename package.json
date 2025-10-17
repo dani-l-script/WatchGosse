@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "vite",
-    "start-fakeserver": "node ./mockedServer/server.cjs",
+    "start-fs": "node ./mockedServer/server.cjs",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
@@ -13,9 +13,10 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
-    "apexcharts": "^3.41.1",
+    "apexcharts": "^3.35.3",
     "axios": "^1.4.0",
     "react": "^18.2.0",
+    "react-apexcharts": "^1.4.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.1.2",
     "react-router-dom": "^6.15.0",
