@@ -25,6 +25,7 @@ const chartsSlice = createSlice({
       .addCase(fetchData.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.data = parseCandleStickData(action.payload);
+        console.log(parseCandleStickData(action.payload))
       })
       .addCase(fetchData.rejected, (state, action) => {
         state.status = 'failed';

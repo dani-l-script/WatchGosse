@@ -1,10 +1,9 @@
-import React from 'react'
-import CandleCharts from '../../components/CandleCharts'
+import CandleCharts from "../../components/CandleCharts";
 
 export default function Home() {
   return (
-    <div className='home-container'>
-      <CandleCharts/>
+    <div className="home-container">
+      <CandleCharts />
     </div>
-  )
+  );
 }
