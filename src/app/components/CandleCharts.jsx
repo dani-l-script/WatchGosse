@@ -136,6 +136,15 @@ const CandleCharts = ({ isRealtime = false }) => {
       },
       animations: {
         enabled: true,
+        easing: "linear",
+        speed: 300,
+        animateGradually: {
+          enabled: false,
+        },
+        dynamicAnimation: {
+          enabled: true,
+          speed: 200,
+        },
       },
     },
     annotations: annotations,
