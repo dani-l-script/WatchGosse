@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { fetchData } from "../features/slices/chartsSlice";
+import { selectVisibleCandles } from "../features/slices/chartsRealtimeSlice";
 import Chart from "react-apexcharts";
 import {
   getOverallStats,
@@ -19,7 +20,11 @@ const CandleCharts = ({ isRealtime = false }) => {
   // Seleccionar el slice correcto según el modo
   const sliceKey = isRealtime ? "dataChartsRealtime" : "dataCharts";
 
-  const data = useSelector((state) => state[sliceKey].data);
+  // Para realtime, usar el selector de ventana visible
+  const realtimeData = useSelector(selectVisibleCandles);
+  const staticData = useSelector((state) => state[sliceKey].data);
+  const data = isRealtime ? realtimeData : staticData;
+
   const operations = useSelector((state) => state[sliceKey].operations);
   const status = useSelector(
     (state) =>

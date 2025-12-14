@@ -2,16 +2,19 @@ import { createSlice } from "@reduxjs/toolkit";
 import parseCandleStickData from "../../utils/dataParserToCandleStick";
 
 const MAX_CANDLES = 1000; // Límite de velas en memoria
+const VISIBLE_WINDOW = 100; // Número de velas visibles en el chart
 
 const chartsRealtimeSlice = createSlice({
   name: "chartsRealtime",
   initialState: {
-    data: [],
+    data: [], // Todos los datos históricos
     operations: [],
     connectionStatus: "disconnected", // 'disconnected' | 'connecting' | 'connected' | 'error' | 'reconnecting'
     lastUpdate: null,
     reconnectAttempts: 0,
     error: null,
+    viewWindowEnd: null, // Índice final de la ventana visible (null = mostrar las últimas)
+    isLiveMode: true, // true = sigue automáticamente las nuevas velas
   },
   reducers: {
     // Gestión de conexión
@@ -137,6 +140,52 @@ const chartsRealtimeSlice = createSlice({
       state.error = action.payload;
       state.connectionStatus = "error";
     },
+
+    // Controles de navegación de ventana
+    moveWindowBackward: (state) => {
+      const currentEnd = state.viewWindowEnd ?? state.data.length;
+      const newEnd = Math.max(VISIBLE_WINDOW, currentEnd - VISIBLE_WINDOW);
+      state.viewWindowEnd = newEnd;
+      state.isLiveMode = false;
+    },
+
+    moveWindowForward: (state) => {
+      const currentEnd = state.viewWindowEnd ?? state.data.length;
+      const newEnd = Math.min(state.data.length, currentEnd + VISIBLE_WINDOW);
+      state.viewWindowEnd = newEnd;
+
+      // Si llegamos al final, volver a modo live
+      if (newEnd >= state.data.length) {
+        state.viewWindowEnd = null;
+        state.isLiveMode = true;
+      }
+    },
+
+    goToStart: (state) => {
+      if (state.data.length > 0) {
+        state.viewWindowEnd = Math.min(VISIBLE_WINDOW, state.data.length);
+        state.isLiveMode = false;
+      }
+    },
+
+    goToEnd: (state) => {
+      state.viewWindowEnd = null;
+      state.isLiveMode = true;
+    },
+
+    setViewWindow: (state, action) => {
+      const endIndex = action.payload;
+      if (endIndex >= state.data.length) {
+        state.viewWindowEnd = null;
+        state.isLiveMode = true;
+      } else {
+        state.viewWindowEnd = Math.max(
+          VISIBLE_WINDOW,
+          Math.min(endIndex, state.data.length)
+        );
+        state.isLiveMode = false;
+      }
+    },
   },
 });
 
@@ -152,6 +201,56 @@ export const {
   updateOperation,
   resetRealtimeData,
   setError,
+  moveWindowBackward,
+  moveWindowForward,
+  goToStart,
+  goToEnd,
+  setViewWindow,
 } = chartsRealtimeSlice.actions;
+
+// Selector para obtener solo los datos de la ventana visible
+export const selectVisibleCandles = (state) => {
+  const { data, viewWindowEnd, isLiveMode } = state.dataChartsRealtime;
+
+  if (data.length === 0) return [];
+
+  // En modo live o sin ventana definida, mostrar las últimas VISIBLE_WINDOW velas
+  if (isLiveMode || viewWindowEnd === null) {
+    return data.slice(-VISIBLE_WINDOW);
+  }
+
+  // Mostrar ventana específica
+  const start = Math.max(0, viewWindowEnd - VISIBLE_WINDOW);
+  return data.slice(start, viewWindowEnd);
+};
+
+// Selector para información de navegación
+export const selectNavigationInfo = (state) => {
+  const { data, viewWindowEnd, isLiveMode } = state.dataChartsRealtime;
+  const total = data.length;
+
+  if (total === 0) {
+    return {
+      start: 0,
+      end: 0,
+      total: 0,
+      isLiveMode: true,
+      canGoBack: false,
+      canGoForward: false,
+    };
+  }
+
+  const actualEnd = viewWindowEnd ?? total;
+  const start = Math.max(0, actualEnd - VISIBLE_WINDOW);
+
+  return {
+    start: start + 1, // 1-indexed para UI
+    end: actualEnd,
+    total,
+    isLiveMode,
+    canGoBack: start > 0,
+    canGoForward: actualEnd < total,
+  };
+};
 
 export default chartsRealtimeSlice.reducer;

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CandleCharts from "../../components/CandleCharts";
 import ConnectionStatus from "../../components/ConnectionStatus";
+import ChartNavigation from "../../components/ChartNavigation";
 import { getWebSocketService } from "../../services/WebSocketService";
 import { parseSocketMessage } from "../../services/dataAdapter";
 import {
@@ -134,7 +135,10 @@ export default function HomeLive() {
 
       <div className="live-content">
         {connectionStatus === "connected" ? (
-          <CandleCharts isRealtime={true} />
+          <>
+            <ChartNavigation />
+            <CandleCharts isRealtime={true} />
+          </>
         ) : connectionStatus === "connecting" ||
           connectionStatus === "reconnecting" ? (
           <div className="live-placeholder connecting">
