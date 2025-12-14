@@ -1,0 +1,120 @@
+.connection-status
+  display: flex
+  align-items: center
+  gap: 16px
+  padding: 12px 20px
+  background: #1a1f2e
+  border-radius: 8px
+  border: 1px solid #2d3748
+  margin-bottom: 16px
+  transition: all 0.3s ease
+
+  .status-indicator
+    display: flex
+    align-items: center
+    gap: 8px
+
+    .status-icon
+      font-size: 16px
+      animation: pulse 2s infinite
+
+    .status-text
+      font-weight: 600
+      font-size: 14px
+      text-transform: uppercase
+      letter-spacing: 0.5px
+
+  .status-details
+    margin-left: auto
+    font-size: 12px
+    color: #b8bcc4
+    display: flex
+    align-items: center
+    gap: 8px
+
+    .last-update
+      opacity: 0.8
+
+    .reconnect-info
+      padding: 4px 8px
+      background: rgba(245, 158, 11, 0.1)
+      border-radius: 4px
+      color: #f59e0b
+
+  .status-error
+    flex: 1
+    margin-left: 12px
+
+    .error-message
+      font-size: 12px
+      color: #ef4444
+      background: rgba(239, 68, 68, 0.1)
+      padding: 4px 8px
+      border-radius: 4px
+      display: inline-block
+
+  // Estados específicos
+  &.connected
+    border-color: #10b981
+    background: rgba(16, 185, 129, 0.05)
+
+    .status-icon
+      animation: none
+
+  &.connecting
+    border-color: #f59e0b
+    background: rgba(245, 158, 11, 0.05)
+
+  &.disconnected
+    border-color: #ef4444
+    background: rgba(239, 68, 68, 0.05)
+
+    .status-icon
+      animation: none
+
+  &.error
+    border-color: #dc2626
+    background: rgba(220, 38, 38, 0.05)
+
+    .status-icon
+      animation: shake 0.5s infinite
+
+  &.reconnecting
+    border-color: #f59e0b
+    background: rgba(245, 158, 11, 0.05)
+
+    .status-icon
+      animation: spin 1s linear infinite
+
+// Animaciones
+@keyframes pulse
+  0%, 100%
+    opacity: 1
+  50%
+    opacity: 0.5
+
+@keyframes spin
+  from
+    transform: rotate(0deg)
+  to
+    transform: rotate(360deg)
+
+@keyframes shake
+  0%, 100%
+    transform: translateX(0)
+  25%
+    transform: translateX(-4px)
+  75%
+    transform: translateX(4px)
+
+// Responsive
+@media (max-width: 768px)
+  .connection-status
+    flex-direction: column
+    align-items: flex-start
+    gap: 8px
+
+    .status-details
+      margin-left: 0
+      width: 100%
+      justify-content: flex-start

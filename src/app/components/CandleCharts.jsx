@@ -1,6 +1,7 @@
 // src/components/DataViewer.js
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import PropTypes from "prop-types";
 import { fetchData } from "../features/slices/chartsSlice";
 import Chart from "react-apexcharts";
 import {
@@ -12,18 +13,25 @@ import {
   getCompletedTrades,
 } from "../utils/operationAnalytics";
 
-const CandleCharts = () => {
+const CandleCharts = ({ isRealtime = false }) => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.dataCharts.data);
-  const operations = useSelector((state) => state.dataCharts.operations);
-  const status = useSelector((state) => state.dataCharts.status);
-  const error = useSelector((state) => state.dataCharts.error);
+  
+  // Seleccionar el slice correcto según el modo
+  const sliceKey = isRealtime ? "dataChartsRealtime" : "dataCharts";
+  
+  const data = useSelector((state) => state[sliceKey].data);
+  const operations = useSelector((state) => state[sliceKey].operations);
+  const status = useSelector((state) => state[sliceKey].status || (isRealtime ? state[sliceKey].connectionStatus : "idle"));
+  const error = useSelector((state) => state[sliceKey].error);
 
   const [showOperations, setShowOperations] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchData());
-  }, [dispatch]);
+    // Solo hacer fetch si es modo estático
+    if (!isRealtime) {
+      dispatch(fetchData());
+    }
+  }, [dispatch, isRealtime]);
 
   if (status === "loading") {
     return (
@@ -865,6 +873,10 @@ const CandleCharts = () => {
       )}
     </div>
   );
+};
+
+CandleCharts.propTypes = {
+  isRealtime: PropTypes.bool,
 };
 
 export default CandleCharts;
