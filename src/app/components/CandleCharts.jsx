@@ -115,6 +115,7 @@ const CandleCharts = ({ isRealtime = false }) => {
     chart: {
       type: "candlestick",
       height: 450,
+      width: "100%",
       background: "#1a1f2e",
       foreColor: "#b8bcc4",
       toolbar: {
@@ -266,9 +267,10 @@ const CandleCharts = ({ isRealtime = false }) => {
   return (
     <div
       style={{
-        padding: "20px",
+        padding: "0",
         backgroundColor: "#0f1419",
         minHeight: "100vh",
+        width: "100%",
       }}
     >
       <h2
@@ -283,7 +285,7 @@ const CandleCharts = ({ isRealtime = false }) => {
       </h2>
 
       {data.length > 0 ? (
-        <div>
+        <div style={{ width: "100%" }}>
           {/* Overall Statistics */}
           {overallStats && (
             <div
@@ -626,12 +628,13 @@ const CandleCharts = ({ isRealtime = false }) => {
           </div>
 
           {/* Chart */}
-          <div style={{ marginBottom: "20px" }}>
+          <div style={{ marginBottom: "20px", width: "100%" }}>
             <Chart
               options={options}
               series={series}
               type="candlestick"
               height={450}
+              width="100%"
             />
           </div>
 
