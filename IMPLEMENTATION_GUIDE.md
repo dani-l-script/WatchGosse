@@ -40,6 +40,7 @@ mockedServer/
 ### **Dos Vistas Independientes**
 
 1. **Vista Estática** (`/`) - `Home.jsx`
+
    - Datos cargados desde HTTP/JSON
    - Redux slice: `chartsSlice`
    - Carga completa al inicio
@@ -97,11 +98,13 @@ WS_PORT=8080
 ### **Opción 1: Dos Terminales (Recomendado)**
 
 **Terminal 1 - Servidor (HTTP + WebSocket):**
+
 ```bash
 npm run start-fs
 ```
 
 Verás:
+
 ```
 📡 HTTP Server running on port 3000
    ✅ Static data endpoint: http://localhost:3000/api/data
@@ -111,6 +114,7 @@ Verás:
 ```
 
 **Terminal 2 - Cliente (React + Vite):**
+
 ```bash
 npm start
 ```
@@ -118,6 +122,7 @@ npm start
 ### **Opción 2: Un Solo Comando (Futuro)**
 
 Puedes añadir a `package.json`:
+
 ```json
 "scripts": {
   "dev:all": "concurrently \"npm run start-fs\" \"npm start\""
@@ -131,17 +136,21 @@ Requiere: `npm install -D concurrently`
 ## 🌐 Navegación
 
 ### Vista Estática (Datos desde JSON)
+
 ```
 http://localhost:8080/
 ```
+
 - Carga completa al inicio
 - Datos históricos
 - No requiere WebSocket
 
 ### Vista en Tiempo Real (Datos por WebSocket)
+
 ```
 http://localhost:8080/live
 ```
+
 - **Indicador de conexión**: 🟢 LIVE / 🟡 Connecting / 🔴 Disconnected
 - Datos llegan uno por segundo
 - Actualización automática del gráfico
@@ -161,6 +170,7 @@ http://localhost:8080/live
 ### **Mensajes Enviados por el Servidor**
 
 #### Batch Inicial (al conectar)
+
 ```json
 {
   "type": "batch",
@@ -172,6 +182,7 @@ http://localhost:8080/live
 ```
 
 #### Candle Individual (cada 1 segundo)
+
 ```json
 {
   "type": "candle",
@@ -186,6 +197,7 @@ http://localhost:8080/live
 ```
 
 #### Operación
+
 ```json
 {
   "type": "operation",
@@ -205,15 +217,16 @@ http://localhost:8080/live
 
 Muestra el estado de la conexión WebSocket:
 
-| Estado | Icono | Color | Descripción |
-|--------|-------|-------|-------------|
-| `connected` | 🟢 | Verde | Conectado y recibiendo datos |
-| `connecting` | 🟡 | Amarillo | Estableciendo conexión |
-| `disconnected` | 🔴 | Rojo | Sin conexión |
-| `error` | ⚠️ | Rojo | Error de conexión |
-| `reconnecting` | 🔄 | Amarillo | Reintentando conexión (X/5) |
+| Estado         | Icono | Color    | Descripción                  |
+| -------------- | ----- | -------- | ---------------------------- |
+| `connected`    | 🟢    | Verde    | Conectado y recibiendo datos |
+| `connecting`   | 🟡    | Amarillo | Estableciendo conexión       |
+| `disconnected` | 🔴    | Rojo     | Sin conexión                 |
+| `error`        | ⚠️    | Rojo     | Error de conexión            |
+| `reconnecting` | 🔄    | Amarillo | Reintentando conexión (X/5)  |
 
 **Características:**
+
 - Muestra último update: "Last update: 2s ago"
 - Intentos de reconexión con contador
 - Mensajes de error detallados
@@ -237,6 +250,7 @@ Si el servidor WebSocket no está corriendo:
 
 1. Navega a `/live`
 2. Verás el placeholder:
+
    ```
    🔌 Not Connected
    Unable to connect to the live data server.
@@ -284,6 +298,7 @@ const tcpService = getTCPService();
 ```
 
 ### 3. Sin cambios en:
+
 - Redux slices
 - `dataAdapter.js`
 - `ConnectionStatus.jsx`
@@ -296,6 +311,7 @@ const tcpService = getTCPService();
 ### **chartsRealtimeSlice**
 
 **Estado:**
+
 ```javascript
 {
   data: [],                    // Velas (max 1000)
@@ -308,6 +324,7 @@ const tcpService = getTCPService();
 ```
 
 **Acciones:**
+
 - `setConnectionStatus` - Actualiza estado de conexión
 - `setInitialData` - Carga batch inicial
 - `updateLastCandle` - Actualiza última vela (mismo timestamp)
@@ -320,17 +337,20 @@ const tcpService = getTCPService();
 ## 🎯 Próximos Pasos Sugeridos
 
 1. **Optimizaciones de Rendimiento**
+
    - [ ] Throttling de actualizaciones (máx. cada 500ms)
    - [ ] Memoización con `useMemo` y `useCallback`
    - [ ] Virtualización de listas largas
 
 2. **Funcionalidades Adicionales**
+
    - [ ] Botón "Pause/Resume" en `/live`
    - [ ] Selector de velocidad (1x, 2x, 5x)
    - [ ] Exportar datos en vivo a CSV
    - [ ] Notificaciones de operaciones importantes
 
 3. **UX Mejorada**
+
    - [ ] Navbar para cambiar entre vistas
    - [ ] Indicador de "buffering" durante lag
    - [ ] Sound/visual alert en operaciones
@@ -346,16 +366,19 @@ const tcpService = getTCPService();
 ## 🐛 Troubleshooting
 
 ### Problema: "WebSocket connection failed"
+
 - **Solución**: Verificar que `npm run start-fs` está ejecutándose
 - Revisar puerto en `.env` (`WS_PORT=8080`)
 - Verificar firewall no bloquea puerto 8080
 
 ### Problema: "Gráfico no se actualiza"
+
 - Abrir DevTools → Console → Buscar mensajes `📊 Sent candle`
 - Verificar que Redux DevTools muestra acciones `updateLastCandle`
 - Revisar que `isRealtime={true}` está en `<CandleCharts />`
 
 ### Problema: "Datos no coinciden"
+
 - Revisar `dataAdapter.js` → función `parseSocketMessage`
 - Verificar formato JSON en `realtest.json`
 - Comprobar logs del servidor
@@ -374,6 +397,7 @@ const tcpService = getTCPService();
 **¡Implementación completa! 🎉**
 
 Ahora puedes:
+
 - Ver datos estáticos en `/`
 - Ver datos en tiempo real en `/live`
 - Cambiar fácilmente a TCP en el futuro

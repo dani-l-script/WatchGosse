@@ -1,6 +1,6 @@
 /**
  * Data Adapter - Transforma datos del socket/TCP al formato esperado por Redux
- * 
+ *
  * Esta capa permite cambiar el protocolo de transporte (WebSocket, TCP, etc.)
  * sin afectar la lógica de negocio en Redux.
  */
@@ -16,7 +16,13 @@ export const adaptSocketCandle = (socketData) => {
     // { open, high, low, close, time }
     const { open, high, low, close, time } = socketData;
 
-    if (!time || open === undefined || high === undefined || low === undefined || close === undefined) {
+    if (
+      !time ||
+      open === undefined ||
+      high === undefined ||
+      low === undefined ||
+      close === undefined
+    ) {
       console.warn("⚠️ Invalid candle data received:", socketData);
       return null;
     }

@@ -11,15 +11,18 @@ Se ha completado exitosamente la implementación de datos en tiempo real con la 
 ### ✨ Características Principales
 
 1. **Dos Vistas Independientes**
+
    - `/` - Vista estática (datos desde JSON/HTTP)
    - `/live` - Vista en tiempo real (datos desde WebSocket)
 
 2. **Arquitectura Desacoplada**
+
    - Capa de servicios independiente de Redux
    - Fácil migración a TCP u otro protocolo
    - Interfaz abstracta `IDataService`
 
 3. **Servidor Dual**
+
    - HTTP Server (puerto 3000) - Datos estáticos
    - WebSocket Server (puerto 8080) - Datos en streaming
    - Un solo comando: `npm run start-fs`
@@ -35,22 +38,27 @@ Se ha completado exitosamente la implementación de datos en tiempo real con la 
 ## 📂 ARCHIVOS CREADOS
 
 ### Redux & Estado
+
 - ✅ `src/app/features/slices/chartsRealtimeSlice.js` (182 líneas)
 
 ### Servicios (Desacoplados)
+
 - ✅ `src/app/services/IDataService.js` (68 líneas)
 - ✅ `src/app/services/WebSocketService.js` (220 líneas)
 - ✅ `src/app/services/dataAdapter.js` (118 líneas)
 
 ### Componentes UI
+
 - ✅ `src/app/components/ConnectionStatus.jsx` (93 líneas)
 - ✅ `src/app/components/connectionStatus.sass` (111 líneas)
 
 ### Layouts
+
 - ✅ `src/app/Layouts/HomeLive/HomeLive.jsx` (117 líneas)
 - ✅ `src/app/Layouts/HomeLive/homeLive.sass` (92 líneas)
 
 ### Documentación
+
 - ✅ `IMPLEMENTATION_GUIDE.md` (Guía completa de uso)
 - ✅ `.env.example` (Template de configuración)
 
@@ -70,16 +78,19 @@ Se ha completado exitosamente la implementación de datos en tiempo real con la 
 ## 🚀 CÓMO PROBAR
 
 ### 1️⃣ Instalar dependencias (Ya hecho)
+
 ```bash
 npm install
 ```
 
 ### 2️⃣ Iniciar servidor
+
 ```bash
 npm run start-fs
 ```
 
 **Deberías ver:**
+
 ```
 📡 HTTP Server running on port 3000
    ✅ Static data endpoint: http://localhost:3000/api/data
@@ -89,6 +100,7 @@ npm run start-fs
 ```
 
 ### 3️⃣ Iniciar cliente (en otra terminal)
+
 ```bash
 npm start
 ```
@@ -96,10 +108,12 @@ npm start
 ### 4️⃣ Navegar a las vistas
 
 **Vista Estática:**
+
 - URL: `http://localhost:8080/`
 - Comportamiento: Carga todos los datos al inicio
 
 **Vista en Tiempo Real:**
+
 - URL: `http://localhost:8080/live`
 - Comportamiento:
   - Muestra indicador de conexión 🟢 LIVE
@@ -191,24 +205,28 @@ npm start
 ## 🛡️ CARACTERÍSTICAS DE ROBUSTEZ
 
 ### Reconexión Automática
+
 - ✅ Hasta 5 intentos
 - ✅ Backoff exponencial (2s → 10s)
 - ✅ Indicador visual de estado
 - ✅ No reintenta si desconexión es manual
 
 ### Gestión de Errores
+
 - ✅ Try-catch en parseo de mensajes
 - ✅ Validación de estructura de datos
 - ✅ Mensajes de error descriptivos
 - ✅ Fallback gracioso en caso de fallo
 
 ### Limpieza de Recursos
+
 - ✅ Cleanup en useEffect
 - ✅ Desregistro de listeners
 - ✅ Cierre de conexión al desmontar
 - ✅ Reseteo de estado Redux
 
 ### Optimización
+
 - ✅ Límite de 1000 candles en memoria
 - ✅ Slice del array para evitar overflow
 - ✅ Logs informativos (no spam)
@@ -219,6 +237,7 @@ npm start
 ## 🔧 CONFIGURACIÓN
 
 ### Variables de Entorno (.env)
+
 ```env
 # HTTP Server
 VITE_CANDLE_CHARTS=http://localhost:3000/api/data
@@ -230,10 +249,11 @@ WS_PORT=8080
 ```
 
 ### Scripts NPM
+
 ```json
 {
-  "start": "vite",                    // Cliente React
-  "start-fs": "node ./mockedServer/server.cjs",  // Servidor
+  "start": "vite", // Cliente React
+  "start-fs": "node ./mockedServer/server.cjs", // Servidor
   "dev": "vite",
   "build": "vite build"
 }
@@ -244,7 +264,9 @@ WS_PORT=8080
 ## 🎨 COMPONENTES UI
 
 ### ConnectionStatus
+
 Muestra estado de conexión en tiempo real:
+
 - 🟢 **LIVE** - Conectado (verde)
 - 🟡 **Connecting...** - Conectando (amarillo)
 - 🔴 **Disconnected** - Desconectado (rojo)
@@ -252,6 +274,7 @@ Muestra estado de conexión en tiempo real:
 - 🔄 **Reconnecting (X)** - Reconectando (amarillo)
 
 ### HomeLive
+
 - Header con título "📡 Live Trading Data"
 - ConnectionStatus siempre visible
 - Placeholder informativo cuando no conectado
@@ -263,7 +286,7 @@ Muestra estado de conexión en tiempo real:
 
 ```json
 {
-  "ws": "^8.14.0"  // WebSocket para Node.js (servidor)
+  "ws": "^8.14.0" // WebSocket para Node.js (servidor)
 }
 ```
 
@@ -274,21 +297,25 @@ Muestra estado de conexión en tiempo real:
 ## 🌟 VENTAJAS DE LA ARQUITECTURA
 
 ### 1. Desacoplamiento
+
 - Servicios no conocen Redux
 - Fácil testing unitario
 - Intercambiable (WebSocket → TCP → SSE)
 
 ### 2. Mantenibilidad
+
 - Separación clara de responsabilidades
 - Código modular y reutilizable
 - Documentación inline
 
 ### 3. Escalabilidad
+
 - Preparado para múltiples conexiones
 - Límite de memoria configurable
 - Arquitectura extensible
 
 ### 4. Developer Experience
+
 - Hot Module Replacement (HMR)
 - Redux DevTools compatible
 - Logs informativos
@@ -299,17 +326,20 @@ Muestra estado de conexión en tiempo real:
 ## 🔮 FUTURAS MEJORAS POSIBLES
 
 ### Corto Plazo
+
 - [ ] Botón Pause/Resume en vista Live
 - [ ] Selector de velocidad (1x, 2x, 5x, 10x)
 - [ ] Toggle entre vistas sin cambiar ruta
 
 ### Medio Plazo
+
 - [ ] Implementar TCPService
 - [ ] Throttling configurable
 - [ ] Notificaciones de operaciones
 - [ ] Exportar datos live a CSV
 
 ### Largo Plazo
+
 - [ ] Multi-tenancy (varios clientes)
 - [ ] Autenticación WebSocket
 - [ ] Compresión de mensajes
@@ -320,17 +350,20 @@ Muestra estado de conexión en tiempo real:
 ## 📞 PUNTOS DE CONTACTO CON LA ARQUITECTURA
 
 ### Para cambiar a TCP:
+
 1. Crear `src/app/services/TCPService.js`
 2. Implementar `IDataService`
 3. Cambiar import en `HomeLive.jsx`
 4. **Sin tocar**: Redux, componentes, adaptadores
 
 ### Para añadir nuevo tipo de mensaje:
+
 1. Actualizar `dataAdapter.parseSocketMessage()`
 2. Añadir reducer en `chartsRealtimeSlice.js`
 3. Manejar en `HomeLive.jsx` handler
 
 ### Para optimizar rendimiento:
+
 1. Añadir throttling en `HomeLive.jsx`
 2. Usar `useMemo` en `CandleCharts.jsx`
 3. Implementar virtualización si es necesario

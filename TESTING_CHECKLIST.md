@@ -1,6 +1,7 @@
 # ✅ CHECKLIST DE PRUEBAS - Testing Guide
 
 ## 🎯 Objetivo
+
 Verificar que la implementación de datos en tiempo real funciona correctamente.
 
 ---
@@ -33,11 +34,13 @@ npm list ws
 ### 2️⃣ INICIAR SERVIDOR
 
 **Terminal 1:**
+
 ```bash
 npm run start-fs
 ```
 
 ✅ **Esperado:**
+
 ```
 📡 HTTP Server running on port 3000
    ✅ Static data endpoint: http://localhost:3000/api/data
@@ -48,6 +51,7 @@ npm run start-fs
 ```
 
 ❌ **Si falla:**
+
 - Verificar que puerto 3000 y 8080 están libres
 - Verificar que `realtest.json` existe
 - Revisar logs de error
@@ -57,11 +61,13 @@ npm run start-fs
 ### 3️⃣ INICIAR CLIENTE
 
 **Terminal 2:**
+
 ```bash
 npm start
 ```
 
 ✅ **Esperado:**
+
 ```
 VITE v4.4.5  ready in XXX ms
 
@@ -70,6 +76,7 @@ VITE v4.4.5  ready in XXX ms
 ```
 
 ❌ **Si falla:**
+
 - Verificar que puerto 8080 está libre
 - Verificar que no hay errores de sintaxis
 - Ejecutar `npm run lint`
@@ -119,6 +126,7 @@ VITE v4.4.5  ready in XXX ms
 #### 5.2 - Mensajes en Consola
 
 Debe mostrar:
+
 ```
 🔌 Connecting to WebSocket: ws://localhost:8080
 ✅ WebSocket connected
@@ -165,6 +173,7 @@ Debe mostrar:
 - [ ] Después de 5 intentos, se detiene
 
 **Reiniciar servidor:**
+
 ```bash
 npm run start-fs
 ```
@@ -183,10 +192,12 @@ npm run start-fs
 **Entre vistas:**
 
 1. Navegar de `/` a `/live`
+
    - [ ] Conexión WebSocket se establece
    - [ ] No hay memory leaks
 
 2. Navegar de `/live` a `/`
+
    - [ ] Conexión WebSocket se cierra
    - [ ] Console muestra "🧹 Cleaning up HomeLive"
    - [ ] No hay errores
@@ -211,6 +222,7 @@ npm run start-fs
 
 - [ ] State `dataChartsRealtime` existe
 - [ ] Acciones disparadas:
+
   - `chartsRealtime/setConnectionStatus` (connecting)
   - `chartsRealtime/setConnectionStatus` (connected)
   - `chartsRealtime/setInitialData`
@@ -238,11 +250,13 @@ npm run start-fs
 **DevTools → Network:**
 
 **Vista estática (`/`):**
+
 - [ ] Request a `http://localhost:3000/api/data`
 - [ ] Status: 200 OK
 - [ ] Response: JSON completo
 
 **Vista realtime (`/live`):**
+
 - [ ] WebSocket connection a `ws://localhost:8080`
 - [ ] Status: 101 Switching Protocols
 - [ ] Messages tab muestra mensajes entrantes
@@ -264,6 +278,7 @@ npm run start-fs
 - [ ] Uso de memoria estable
 
 **Verificar límite de candles:**
+
 - [ ] State tiene máximo 1000 candles (revisar Redux DevTools)
 - [ ] Candles antiguos se eliminan automáticamente
 
@@ -277,6 +292,7 @@ npm run start-fs
 ### Test 1: Endpoint HTTP
 
 **PowerShell:**
+
 ```powershell
 Invoke-WebRequest -Uri "http://localhost:3000/api/data" | Select-Object -ExpandProperty Content | ConvertFrom-Json
 ```
@@ -288,19 +304,21 @@ Invoke-WebRequest -Uri "http://localhost:3000/api/data" | Select-Object -ExpandP
 ### Test 2: WebSocket Manualmente
 
 **DevTools Console:**
-```javascript
-const ws = new WebSocket('ws://localhost:8080');
 
-ws.onopen = () => console.log('✅ Connected');
+```javascript
+const ws = new WebSocket("ws://localhost:8080");
+
+ws.onopen = () => console.log("✅ Connected");
 ws.onmessage = (e) => {
   const msg = JSON.parse(e.data);
-  console.log('📨', msg.type, msg.data);
+  console.log("📨", msg.type, msg.data);
 };
-ws.onerror = (e) => console.error('❌ Error', e);
-ws.onclose = () => console.log('🔌 Closed');
+ws.onerror = (e) => console.error("❌ Error", e);
+ws.onclose = () => console.log("🔌 Closed");
 ```
 
 ✅ **Esperado:**
+
 - Mensaje "Connected"
 - Mensaje tipo "batch" con 50 candles
 - Mensajes tipo "candle" cada segundo
@@ -327,24 +345,28 @@ ws.onclose = () => console.log('🔌 Closed');
 ## 🎯 CRITERIOS DE ACEPTACIÓN
 
 ### ✅ FUNCIONALIDAD BÁSICA
+
 - [x] Vista estática carga datos completos
 - [x] Vista realtime conecta a WebSocket
 - [x] Datos se actualizan en tiempo real
 - [x] Indicador de conexión funciona
 
 ### ✅ ROBUSTEZ
+
 - [x] Reconexión automática (hasta 5 intentos)
 - [x] Limpieza de recursos al desmontar
 - [x] Manejo de errores gracioso
 - [x] Sin memory leaks
 
 ### ✅ UX
+
 - [x] Placeholders informativos
 - [x] Animaciones de carga
 - [x] Feedback visual claro
 - [x] Sin errores en consola
 
 ### ✅ ARQUITECTURA
+
 - [x] Servicios desacoplados de Redux
 - [x] Adaptador de datos funcional
 - [x] Fácil migración a TCP
@@ -355,7 +377,9 @@ ws.onclose = () => console.log('🔌 Closed');
 ## 🐛 TROUBLESHOOTING COMÚN
 
 ### Problema: "WebSocket connection failed"
+
 **Solución:**
+
 1. Verificar servidor corriendo: `npm run start-fs`
 2. Verificar URL en `.env`: `VITE_WEBSOCKET_URL=ws://localhost:8080`
 3. Verificar puerto libre: `netstat -ano | findstr :8080`
@@ -363,7 +387,9 @@ ws.onclose = () => console.log('🔌 Closed');
 ---
 
 ### Problema: "Gráfico no se actualiza"
+
 **Solución:**
+
 1. Verificar Redux DevTools → State `dataChartsRealtime.data` crece
 2. Verificar Console → Mensajes "New candle added"
 3. Verificar prop `isRealtime={true}` en `CandleCharts`
@@ -371,14 +397,18 @@ ws.onclose = () => console.log('🔌 Closed');
 ---
 
 ### Problema: "Cannot read property 'data' of undefined"
+
 **Solución:**
+
 1. Verificar `store.js` tiene `dataChartsRealtime: chartsRealtimeSlice`
 2. Reiniciar cliente: `Ctrl+C` → `npm start`
 
 ---
 
 ### Problema: "Reconexión infinita"
+
 **Solución:**
+
 1. Verificar servidor está corriendo
 2. Verificar URL correcta en `.env`
 3. Después de 5 intentos, debe detenerse automáticamente
@@ -388,6 +418,7 @@ ws.onclose = () => console.log('🔌 Closed');
 ## 📝 REPORTE DE RESULTADOS
 
 ### ✅ Test Exitoso
+
 ```
 [✓] Vista estática funcional
 [✓] Vista realtime funcional
@@ -400,6 +431,7 @@ ws.onclose = () => console.log('🔌 Closed');
 ```
 
 ### ❌ Test Fallido
+
 ```
 [✗] Problema detectado: [descripción]
 [i] Pasos reproducción: [...]
@@ -412,12 +444,14 @@ ws.onclose = () => console.log('🔌 Closed');
 ## 🎓 SIGUIENTE PASO
 
 Si todos los tests pasan:
+
 1. ✅ Marcar ticket como completo
 2. ✅ Documentar cualquier issue conocido
 3. ✅ Preparar demo para stakeholders
 4. ✅ Planificar optimizaciones futuras
 
 Si algún test falla:
+
 1. ❌ Revisar logs de error
 2. ❌ Verificar configuración
 3. ❌ Consultar TROUBLESHOOTING

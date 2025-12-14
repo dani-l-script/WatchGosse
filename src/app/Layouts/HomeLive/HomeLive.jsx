@@ -15,11 +15,14 @@ import {
 } from "../../features/slices/chartsRealtimeSlice";
 import "./homeLive.sass";
 
-const WEBSOCKET_URL = import.meta.env.VITE_WEBSOCKET_URL || "ws://localhost:8080";
+const WEBSOCKET_URL =
+  import.meta.env.VITE_WEBSOCKET_URL || "ws://localhost:8080";
 
 export default function HomeLive() {
   const dispatch = useDispatch();
-  const connectionStatus = useSelector((state) => state.dataChartsRealtime.connectionStatus);
+  const connectionStatus = useSelector(
+    (state) => state.dataChartsRealtime.connectionStatus
+  );
 
   useEffect(() => {
     const wsService = getWebSocketService();
@@ -27,7 +30,7 @@ export default function HomeLive() {
     // Handler para mensajes
     const handleMessage = (rawMessage) => {
       const parsed = parseSocketMessage(rawMessage);
-      
+
       if (!parsed) {
         console.warn("⚠️ Could not parse message:", rawMessage);
         return;
@@ -132,7 +135,8 @@ export default function HomeLive() {
       <div className="live-content">
         {connectionStatus === "connected" ? (
           <CandleCharts isRealtime={true} />
-        ) : connectionStatus === "connecting" || connectionStatus === "reconnecting" ? (
+        ) : connectionStatus === "connecting" ||
+          connectionStatus === "reconnecting" ? (
           <div className="live-placeholder connecting">
             <div className="spinner"></div>
             <p>Connecting to live data stream...</p>

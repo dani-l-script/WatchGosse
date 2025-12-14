@@ -2,7 +2,7 @@ import { IDataService } from "./IDataService";
 
 /**
  * Implementación de WebSocket del servicio de datos
- * 
+ *
  * Desacoplado de Redux - solo se encarga de la comunicación
  */
 export class WebSocketService extends IDataService {
@@ -66,11 +66,13 @@ export class WebSocketService extends IDataService {
           this._emit("disconnect", { code: event.code, reason: event.reason });
 
           // Intentar reconectar si no fue manual
-          if (!this.isManualDisconnect && this.reconnectAttempts < this.maxReconnectAttempts) {
+          if (
+            !this.isManualDisconnect &&
+            this.reconnectAttempts < this.maxReconnectAttempts
+          ) {
             this._scheduleReconnect();
           }
         };
-
       } catch (error) {
         console.error("❌ Error creating WebSocket:", error);
         this._emit("error", { type: "connection_error", error });
@@ -88,10 +90,13 @@ export class WebSocketService extends IDataService {
     }
 
     this.reconnectAttempts++;
-    const delay = this.reconnectDelay * Math.pow(1.5, this.reconnectAttempts - 1); // Backoff exponencial
+    const delay =
+      this.reconnectDelay * Math.pow(1.5, this.reconnectAttempts - 1); // Backoff exponencial
 
-    console.log(`🔄 Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
-    
+    console.log(
+      `🔄 Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`
+    );
+
     this._emit("reconnect", {
       attempt: this.reconnectAttempts,
       maxAttempts: this.maxReconnectAttempts,
@@ -108,7 +113,7 @@ export class WebSocketService extends IDataService {
    */
   disconnect() {
     this.isManualDisconnect = true;
-    
+
     if (this.reconnectTimer) {
       clearTimeout(this.reconnectTimer);
       this.reconnectTimer = null;
@@ -142,7 +147,9 @@ export class WebSocketService extends IDataService {
       return;
     }
 
-    this.listeners[event] = this.listeners[event].filter(cb => cb !== callback);
+    this.listeners[event] = this.listeners[event].filter(
+      (cb) => cb !== callback
+    );
   }
 
   /**
@@ -155,7 +162,7 @@ export class WebSocketService extends IDataService {
     }
 
     try {
-      const message = typeof data === 'string' ? data : JSON.stringify(data);
+      const message = typeof data === "string" ? data : JSON.stringify(data);
       this.ws.send(message);
       return true;
     } catch (error) {
@@ -201,7 +208,7 @@ export class WebSocketService extends IDataService {
       return;
     }
 
-    this.listeners[event].forEach(callback => {
+    this.listeners[event].forEach((callback) => {
       try {
         callback(data);
       } catch (error) {
@@ -214,7 +221,7 @@ export class WebSocketService extends IDataService {
    * Limpiar todos los listeners
    */
   removeAllListeners() {
-    Object.keys(this.listeners).forEach(event => {
+    Object.keys(this.listeners).forEach((event) => {
       this.listeners[event] = [];
     });
   }

@@ -15,13 +15,17 @@ import {
 
 const CandleCharts = ({ isRealtime = false }) => {
   const dispatch = useDispatch();
-  
+
   // Seleccionar el slice correcto según el modo
   const sliceKey = isRealtime ? "dataChartsRealtime" : "dataCharts";
-  
+
   const data = useSelector((state) => state[sliceKey].data);
   const operations = useSelector((state) => state[sliceKey].operations);
-  const status = useSelector((state) => state[sliceKey].status || (isRealtime ? state[sliceKey].connectionStatus : "idle"));
+  const status = useSelector(
+    (state) =>
+      state[sliceKey].status ||
+      (isRealtime ? state[sliceKey].connectionStatus : "idle")
+  );
   const error = useSelector((state) => state[sliceKey].error);
 
   const [showOperations, setShowOperations] = useState(true);

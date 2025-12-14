@@ -73,6 +73,7 @@ WatchGosse/
 ## 📊 Estadísticas
 
 ### Archivos Creados: 11
+
 1. `chartsRealtimeSlice.js` (Redux)
 2. `IDataService.js` (Interfaz)
 3. `WebSocketService.js` (Servicio)
@@ -86,6 +87,7 @@ WatchGosse/
 11. `IMPLEMENTATION_SUMMARY.md` (Docs)
 
 ### Archivos Modificados: 5
+
 1. `App.jsx` - Añadida ruta `/live`
 2. `store.js` - Registrado nuevo slice
 3. `CandleCharts.jsx` - Prop `isRealtime`
@@ -94,6 +96,7 @@ WatchGosse/
 6. `.env` - Variables WebSocket
 
 ### Líneas de Código: ~1,300+
+
 - Redux: ~180 líneas
 - Servicios: ~400 líneas
 - Componentes: ~300 líneas
@@ -105,6 +108,7 @@ WatchGosse/
 ## 🗂️ Organización por Responsabilidad
 
 ### 🎨 **PRESENTACIÓN** (UI/UX)
+
 ```
 src/app/components/
   ├── CandleCharts.jsx       # Gráfico de velas (dual mode)
@@ -116,6 +120,7 @@ src/app/Layouts/
 ```
 
 ### 🧠 **LÓGICA DE NEGOCIO** (Redux)
+
 ```
 src/app/features/slices/
   ├── chartsSlice.js         # Estado estático
@@ -123,6 +128,7 @@ src/app/features/slices/
 ```
 
 ### 🔌 **SERVICIOS** (Desacoplados)
+
 ```
 src/app/services/
   ├── IDataService.js        # Contrato/Interfaz
@@ -131,6 +137,7 @@ src/app/services/
 ```
 
 ### 🛠️ **UTILIDADES**
+
 ```
 src/app/utils/
   ├── dataParserToCandleStick.js
@@ -138,6 +145,7 @@ src/app/utils/
 ```
 
 ### 🖥️ **BACKEND**
+
 ```
 mockedServer/
   ├── server.cjs             # HTTP + WebSocket
@@ -166,28 +174,31 @@ Chart (ApexCharts)
 
 ## 🎭 Separación de Concerns
 
-| Capa | Responsabilidad | Archivos |
-|------|----------------|----------|
-| **UI** | Renderizado, eventos usuario | `*.jsx`, `*.sass` |
-| **Estado** | Gestión de datos, lógica | `*Slice.js` |
-| **Servicios** | Comunicación externa | `*Service.js` |
-| **Adaptadores** | Transformación de datos | `dataAdapter.js` |
-| **Servidor** | Proveer datos | `server.cjs` |
+| Capa            | Responsabilidad              | Archivos          |
+| --------------- | ---------------------------- | ----------------- |
+| **UI**          | Renderizado, eventos usuario | `*.jsx`, `*.sass` |
+| **Estado**      | Gestión de datos, lógica     | `*Slice.js`       |
+| **Servicios**   | Comunicación externa         | `*Service.js`     |
+| **Adaptadores** | Transformación de datos      | `dataAdapter.js`  |
+| **Servidor**    | Proveer datos                | `server.cjs`      |
 
 ---
 
 ## 🌐 Puntos de Entrada
 
 ### Usuario Final
+
 1. `http://localhost:8080/` → Home (estático)
 2. `http://localhost:8080/live` → HomeLive (realtime)
 
 ### Developer
+
 1. `src/main.jsx` → Entry point de React
 2. `src/App.jsx` → Routing principal
 3. `mockedServer/server.cjs` → Backend
 
 ### Configuración
+
 1. `.env` → Variables de entorno
 2. `package.json` → Scripts y dependencias
 3. `vite.config.js` → Config del bundler
@@ -197,12 +208,14 @@ Chart (ApexCharts)
 ## 🔐 Puntos de Extensión
 
 ### Para añadir nueva fuente de datos:
+
 ```
 src/app/services/
   └── TCPService.js (implementa IDataService)
 ```
 
 ### Para añadir nueva vista:
+
 ```
 src/app/Layouts/
   └── NuevaVista/
@@ -211,6 +224,7 @@ src/app/Layouts/
 ```
 
 ### Para añadir nuevo slice:
+
 ```
 src/app/features/slices/
   └── nuevoSlice.js
@@ -222,12 +236,12 @@ Luego registrar en `store.js`.
 
 ## 📚 Documentación
 
-| Archivo | Contenido |
-|---------|-----------|
-| `README.md` | Descripción general del proyecto |
-| `IMPLEMENTATION_GUIDE.md` | Guía paso a paso de uso |
-| `IMPLEMENTATION_SUMMARY.md` | Resumen ejecutivo |
-| `STRUCTURE.md` | Este archivo |
+| Archivo                     | Contenido                        |
+| --------------------------- | -------------------------------- |
+| `README.md`                 | Descripción general del proyecto |
+| `IMPLEMENTATION_GUIDE.md`   | Guía paso a paso de uso          |
+| `IMPLEMENTATION_SUMMARY.md` | Resumen ejecutivo                |
+| `STRUCTURE.md`              | Este archivo                     |
 
 ---
 

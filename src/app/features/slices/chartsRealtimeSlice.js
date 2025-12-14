@@ -40,33 +40,37 @@ const chartsRealtimeSlice = createSlice({
       state.data = parseCandleStickData(charts);
       state.operations = operations || [];
       state.lastUpdate = Date.now();
-      console.log("📊 Realtime - Initial Data Loaded:", state.data.length, "candles");
+      console.log(
+        "📊 Realtime - Initial Data Loaded:",
+        state.data.length,
+        "candles"
+      );
     },
 
     // Actualizar última vela (mismo timestamp)
     updateLastCandle: (state, action) => {
       const newCandle = action.payload;
-      
+
       if (state.data.length === 0) {
         // Si no hay datos, añadir como primera vela
         state.data.push(newCandle);
       } else {
         const lastCandle = state.data[state.data.length - 1];
-        
+
         // Si es el mismo timestamp, actualizar
         if (lastCandle.x === newCandle.x) {
           state.data[state.data.length - 1] = newCandle;
         } else {
           // Nuevo timestamp, añadir nueva vela
           state.data.push(newCandle);
-          
+
           // Limitar tamaño del array
           if (state.data.length > MAX_CANDLES) {
             state.data = state.data.slice(-MAX_CANDLES);
           }
         }
       }
-      
+
       state.lastUpdate = Date.now();
     },
 
@@ -74,12 +78,12 @@ const chartsRealtimeSlice = createSlice({
     addNewCandle: (state, action) => {
       const newCandle = action.payload;
       state.data.push(newCandle);
-      
+
       // Limitar tamaño del array
       if (state.data.length > MAX_CANDLES) {
         state.data = state.data.slice(-MAX_CANDLES);
       }
-      
+
       state.lastUpdate = Date.now();
       console.log("🕯️ New candle added:", new Date(newCandle.x).toISOString());
     },
@@ -88,12 +92,12 @@ const chartsRealtimeSlice = createSlice({
     updateBatchCandles: (state, action) => {
       const candles = action.payload;
       state.data = parseCandleStickData(candles);
-      
+
       // Limitar tamaño
       if (state.data.length > MAX_CANDLES) {
         state.data = state.data.slice(-MAX_CANDLES);
       }
-      
+
       state.lastUpdate = Date.now();
       console.log("📊 Batch update:", state.data.length, "candles");
     },
@@ -103,12 +107,16 @@ const chartsRealtimeSlice = createSlice({
       const operation = action.payload;
       state.operations.push(operation);
       state.lastUpdate = Date.now();
-      console.log("💼 Operation added:", operation.operation, operation.profit || 0);
+      console.log(
+        "💼 Operation added:",
+        operation.operation,
+        operation.profit || 0
+      );
     },
 
     updateOperation: (state, action) => {
       const { id, updates } = action.payload;
-      const index = state.operations.findIndex(op => op.id === id);
+      const index = state.operations.findIndex((op) => op.id === id);
       if (index !== -1) {
         state.operations[index] = { ...state.operations[index], ...updates };
         state.lastUpdate = Date.now();

@@ -2,9 +2,15 @@ import { useSelector } from "react-redux";
 import "./connectionStatus.sass";
 
 const ConnectionStatus = () => {
-  const connectionStatus = useSelector((state) => state.dataChartsRealtime.connectionStatus);
-  const lastUpdate = useSelector((state) => state.dataChartsRealtime.lastUpdate);
-  const reconnectAttempts = useSelector((state) => state.dataChartsRealtime.reconnectAttempts);
+  const connectionStatus = useSelector(
+    (state) => state.dataChartsRealtime.connectionStatus
+  );
+  const lastUpdate = useSelector(
+    (state) => state.dataChartsRealtime.lastUpdate
+  );
+  const reconnectAttempts = useSelector(
+    (state) => state.dataChartsRealtime.reconnectAttempts
+  );
   const error = useSelector((state) => state.dataChartsRealtime.error);
 
   const getStatusConfig = () => {
@@ -58,10 +64,10 @@ const ConnectionStatus = () => {
 
   const formatLastUpdate = () => {
     if (!lastUpdate) return "Never";
-    
+
     const now = Date.now();
     const diff = now - lastUpdate;
-    
+
     if (diff < 1000) return "Just now";
     if (diff < 60000) return `${Math.floor(diff / 1000)}s ago`;
     if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
@@ -81,9 +87,7 @@ const ConnectionStatus = () => {
 
       {connectionStatus === "connected" && (
         <div className="status-details">
-          <span className="last-update">
-            Last update: {formatLastUpdate()}
-          </span>
+          <span className="last-update">Last update: {formatLastUpdate()}</span>
         </div>
       )}
 

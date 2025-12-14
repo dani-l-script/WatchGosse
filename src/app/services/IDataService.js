@@ -1,6 +1,6 @@
 /**
  * Interfaz abstracta para servicios de datos
- * 
+ *
  * Permite cambiar fácilmente entre WebSocket, TCP, o cualquier otro protocolo
  * sin modificar el código que consume los datos.
  */
@@ -12,7 +12,8 @@ export class IDataService {
    * @param {Object} options - Opciones de conexión
    * @returns {Promise<void>}
    */
-  async connect(url, options = {}) { // eslint-disable-line no-unused-vars
+  async connect(url, options = {}) {
+    // eslint-disable-line no-unused-vars
     throw new Error("Method 'connect' must be implemented");
   }
 
@@ -30,7 +31,8 @@ export class IDataService {
    * @param {Function} callback - Función a ejecutar cuando ocurre el evento
    * @returns {void}
    */
-  on(event, callback) { // eslint-disable-line no-unused-vars
+  on(event, callback) {
+    // eslint-disable-line no-unused-vars
     throw new Error("Method 'on' must be implemented");
   }
 
@@ -40,7 +42,8 @@ export class IDataService {
    * @param {Function} callback - Función a remover
    * @returns {void}
    */
-  off(event, callback) { // eslint-disable-line no-unused-vars
+  off(event, callback) {
+    // eslint-disable-line no-unused-vars
     throw new Error("Method 'off' must be implemented");
   }
 
@@ -49,7 +52,8 @@ export class IDataService {
    * @param {any} data - Datos a enviar
    * @returns {void}
    */
-  send(data) { // eslint-disable-line no-unused-vars
+  send(data) {
+    // eslint-disable-line no-unused-vars
     throw new Error("Method 'send' must be implemented");
   }
 
